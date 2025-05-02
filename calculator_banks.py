@@ -73,3 +73,29 @@ Masz mniej złudzeń, a więcej odwagi.
 Nie zaczynasz od zera — zaczynasz **z przewagą**.
 To nie jest za późno. To jest **właśnie moment**.
 """)
+
+    st.header("📊 Analiza sensowności budowy drugiego domu")
+    with st.form("budowa_domu"):
+        koszt_budowy = st.number_input("Szacunkowy koszt budowy (zł)", min_value=0.0, step=10000.0)
+        wartosc_rynkowa = st.number_input("Przewidywana wartość rynkowa domu po budowie (zł)", min_value=0.0, step=10000.0)
+        koszt_utrzymania_domu = st.number_input("Miesięczny koszt utrzymania domu w Piotrkowie (zł)", min_value=0.0, step=100.0)
+        wykorzystanie = st.selectbox("Jak planujesz wykorzystać dom?", ["Zamieszkanie", "Wynajem", "Pustostan"])
+        czynsz = 0
+        if wykorzystanie == "Wynajem":
+            czynsz = st.number_input("Szacowany miesięczny czynsz najmu (zł)", min_value=0.0, step=100.0)
+
+        submit_budowa = st.form_submit_button("Sprawdź opłacalność")
+
+    if submit_budowa:
+        if wykorzystanie == "Wynajem" and czynsz > 0:
+            zwrot_lat = round(koszt_budowy / ((czynsz - koszt_utrzymania_domu) * 12), 2) if (czynsz - koszt_utrzymania_domu) > 0 else float('inf')
+            st.info(f"Zwrot z inwestycji przez wynajem: {zwrot_lat} lat")
+        roznica = wartosc_rynkowa - koszt_budowy
+        if roznica > 0:
+            st.success(f"Opłaca się: wartość domu przewyższa koszt budowy o {roznica:,.2f} zł")
+        else:
+            st.warning(f"Nieopłacalne: wartość domu jest niższa niż koszt budowy o {abs(roznica):,.2f} zł")
+
+        if wykorzystanie == "Pustostan":
+            roczny_koszt = koszt_utrzymania_domu * 12
+            st.error(f"Dom jako pustostan będzie Cię kosztował około {roczny_koszt:,.2f} zł rocznie")
