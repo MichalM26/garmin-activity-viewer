@@ -53,27 +53,11 @@ if st.session_state.authenticated:
         else:
             st.success("Zdolność wysoka – potencjalna zdolność hipoteczna")
 
-        st.subheader("📥 Oferty kredytów gotówkowych – import z Google Sheet lub CSV")
-        source_type = st.radio("Wybierz źródło danych", ["Google Sheet", "Plik CSV"])
-
-        if source_type == "Google Sheet":
-            sheet_url = st.text_input("https://docs.google.com/spreadsheets/d/1W701LA55B4K92wy565E7tueE8ptmwMKGUQtzGzZzV1w/edit?gid=0#gid=0")
-            if sheet_url:
-                try:
-                    if "docs.google.com" in sheet_url:
-                        sheet_url = sheet_url.replace("/edit#gid=", "/export?format=csv&gid=")
-                    df_banki = pd.read_csv(sheet_url)
-                    st.success("Oferty załadowane z Google Sheet")
-                    st.dataframe(df_banki, use_container_width=True)
-                except Exception as e:
-                    st.error(f"Błąd ładowania arkusza: {e}")
-
-        else:
-            uploaded_csv = st.file_uploader("Wczytaj plik CSV z ofertami banków", type="csv")
-            if uploaded_csv:
-                try:
-                    df_banki = pd.read_csv(uploaded_csv)
-                    st.success("Oferty załadowane z pliku CSV")
-                    st.dataframe(df_banki, use_container_width=True)
-                except Exception as e:
-                    st.error(f"Błąd ładowania pliku CSV: {e}")
+        st.subheader("📥 Oferty kredytów gotówkowych – aktualizacja z Google Sheet")
+        try:
+            sheet_url = "https://docs.google.com/spreadsheets/d/1WE5vAboPb5jGk_WMpTz6axqYuG7AyoNQ5dbLAVzXw_U/export?format=csv"
+            df_banki = pd.read_csv(sheet_url)
+            st.success("Oferty załadowane z Google Sheet")
+            st.dataframe(df_banki, use_container_width=True)
+        except Exception as e:
+            st.error(f"Błąd ładowania arkusza: {e}")
