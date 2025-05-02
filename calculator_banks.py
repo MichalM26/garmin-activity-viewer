@@ -55,7 +55,7 @@ if st.session_state.authenticated:
 
         st.subheader("📥 Oferty kredytów gotówkowych – aktualizacja z Google Sheet")
         try:
-            sheet_url = "https://docs.google.com/spreadsheets/d/1WE5vAboPb5jGk_WMpTz6axqYuG7AyoNQ5dbLAVzXw_U/export?format=csv"
+            sheet_url = "https://docs.google.com/spreadsheets/d/1W701LA55B4K92wy565E7tueE8ptmwMKGUQtzGzZzV1w/export?format=csv"
             df_banki = pd.read_csv(sheet_url)
             st.success("Oferty załadowane z Google Sheet")
             st.dataframe(df_banki, use_container_width=True)
