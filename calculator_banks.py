@@ -61,3 +61,15 @@ if st.session_state.authenticated:
             st.dataframe(df_banki, use_container_width=True)
         except Exception as e:
             st.error(f"Błąd ładowania arkusza: {e}")
+
+        st.markdown("""
+---
+### 🧭 Dlaczego warto zacząć od nowa po 40-tce?
+
+Masz doświadczenie, którego młodsze pokolenie nie ma. 
+Masz świadomość czasu i odpowiedzialność za swój kierunek. 
+Masz mniej złudzeń, a więcej odwagi.
+
+Nie zaczynasz od zera — zaczynasz **z przewagą**.
+To nie jest za późno. To jest **właśnie moment**.
+""")
