@@ -47,6 +47,9 @@ if st.session_state.authenticated:
             st.write(f"**Suma dystansu:** {total_distance:.2f} km")
             st.write(f"**Suma kalorii:** {int(total_calories)} kcal")
 
+            st.subheader("📄 Podgląd danych z pliku CSV")
+            st.dataframe(df)
+
             st.subheader("📈 Typy aktywności")
             fig1, ax1 = plt.subplots()
             df['Activity Type'].value_counts().plot(kind='bar', ax=ax1, title='Typy aktywności')
