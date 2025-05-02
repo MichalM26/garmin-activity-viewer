@@ -39,7 +39,7 @@ if st.session_state.authenticated:
 
     if submit_kredyt:
         dostepne_srodki = dochod - wydatki - raty
-        maks_rata = dostepne_srodki * 0.4  # założenie: maks 40% dochodu netto na ratę
+        maks_rata = dostepne_srodki * 0.4
         oprocentowanie = 0.08
         mies_rata = maks_rata
         n = okres * 12
@@ -53,18 +53,27 @@ if st.session_state.authenticated:
         else:
             st.success("Zdolność wysoka – potencjalna zdolność hipoteczna")
 
-        st.subheader("🏦 Przykładowe oferty kredytów gotówkowych (maj 2025)")
-        banki = [
-            {"Bank": "Citi Handlowy", "Kwota": "150 000 zł", "RRSO": "10,35%", "Oprocentowanie": "9,89%", "Prowizja": "0%"},
-            {"Bank": "Alior Bank", "Kwota": "250 000 zł", "RRSO": "10,36%", "Oprocentowanie": "9,90%", "Prowizja": "0%"},
-            {"Bank": "BNP Paribas", "Kwota": "230 000 zł", "RRSO": "10,43%", "Oprocentowanie": "9,95%", "Prowizja": "0%"},
-            {"Bank": "Santander Consumer Bank", "Kwota": "300 000 zł", "RRSO": "10,46%", "Oprocentowanie": "9,99%", "Prowizja": "0%"},
-            {"Bank": "Bank Pekao", "Kwota": "250 000 zł", "RRSO": "10,99%", "Oprocentowanie": "10,47%", "Prowizja": "0%"},
-            {"Bank": "VeloBank", "Kwota": "300 000 zł", "RRSO": "11,41%", "Oprocentowanie": "10,85%", "Prowizja": "0%"},
-            {"Bank": "Kasa Stefczyka", "Kwota": "100 000 zł", "RRSO": "11,46%", "Oprocentowanie": "10,90%", "Prowizja": "0%"},
-            {"Bank": "PKO BP", "Kwota": "300 000 zł", "RRSO": "11,56%", "Oprocentowanie": "10,99%", "Prowizja": "0%"},
-            {"Bank": "Raiffeisen Digital Bank", "Kwota": "150 000 zł", "RRSO": "11,99%", "Oprocentowanie": "11,38%", "Prowizja": "0%"},
-            {"Bank": "Santander Bank Polska", "Kwota": "300 000 zł", "RRSO": "12,67%", "Oprocentowanie": "11,99%", "Prowizja": "0%"},
-        ]
-        df_banki = pd.DataFrame(banki)
-        st.dataframe(df_banki, use_container_width=True)
+        st.subheader("📥 Oferty kredytów gotówkowych – import z Google Sheet lub CSV")
+        source_type = st.radio("Wybierz źródło danych", ["Google Sheet", "Plik CSV"])
+
+        if source_type == "Google Sheet":
+            sheet_url = st.text_input("https://docs.google.com/spreadsheets/d/1W701LA55B4K92wy565E7tueE8ptmwMKGUQtzGzZzV1w/edit?gid=0#gid=0")
+            if sheet_url:
+                try:
+                    if "docs.google.com" in sheet_url:
+                        sheet_url = sheet_url.replace("/edit#gid=", "/export?format=csv&gid=")
+                    df_banki = pd.read_csv(sheet_url)
+                    st.success("Oferty załadowane z Google Sheet")
+                    st.dataframe(df_banki, use_container_width=True)
+                except Exception as e:
+                    st.error(f"Błąd ładowania arkusza: {e}")
+
+        else:
+            uploaded_csv = st.file_uploader("Wczytaj plik CSV z ofertami banków", type="csv")
+            if uploaded_csv:
+                try:
+                    df_banki = pd.read_csv(uploaded_csv)
+                    st.success("Oferty załadowane z pliku CSV")
+                    st.dataframe(df_banki, use_container_width=True)
+                except Exception as e:
+                    st.error(f"Błąd ładowania pliku CSV: {e}")
