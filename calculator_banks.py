@@ -10,8 +10,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 USERNAME = "user"
 PASSWORD = "pass123"
 
-st.set_page_config(page_title="Zdolnosc kredytowa"
-st.title("Zdolnosc Kredytowa")
+st.set_page_config(page_title="Garmin Activity Viewer")
+st.title("Garmin Activity Viewer")
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
