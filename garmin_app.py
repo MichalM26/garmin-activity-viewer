@@ -15,19 +15,15 @@ if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
 if not st.session_state.authenticated:
-    with st.form("login"):
-        st.subheader("🔒 Zaloguj się")
-        username_input = st.text_input("Nazwa użytkownika")
-        password_input = st.text_input("Hasło", type="password")
-        submitted = st.form_submit_button("Zaloguj")
-
-        if submitted:
-            if username_input == USERNAME and password_input == PASSWORD:
-                st.session_state.authenticated = True
-                st.success("Zalogowano pomyślnie!")
-                st.experimental_rerun()
-            else:
-                st.error("Nieprawidłowa nazwa użytkownika lub hasło")
+    st.subheader("🔒 Zaloguj się")
+    username_input = st.text_input("Nazwa użytkownika")
+    password_input = st.text_input("Hasło", type="password")
+    if st.button("Zaloguj"):
+        if username_input == USERNAME and password_input == PASSWORD:
+            st.session_state.authenticated = True
+            st.success("Zalogowano pomyślnie!")
+        else:
+            st.error("Nieprawidłowa nazwa użytkownika lub hasło")
 
 if st.session_state.authenticated:
     uploaded_file = st.file_uploader("Wczytaj plik CSV z aktywnościami", type="csv")
